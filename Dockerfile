@@ -2,7 +2,6 @@ ARG FROM=ubuntu:18.04
 FROM $FROM
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV SCREEN_DIMENSIONS 1024x768x16
 
 # Install x & vnc dependencies
 RUN apt-get update \

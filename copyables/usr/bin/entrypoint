@@ -1,0 +1,28 @@
+#!/bin/bash
+
+export VNCSERVER_OPTS="-SecurityTypes None,TLSNone --I-KNOW-THIS-IS-INSECURE"
+
+passwd_files=(
+    /home/developer/.vnc/passwd
+    /run/secrets/.vncpasswd
+    /etc/vncpasswd
+    /code/.vncpasswd
+)
+
+for f in ${passwd_files[@]}; do
+    if [[ -f ${f} ]]; then
+        export VNCSERVER_OPTS="-passwd ${f}"
+        break
+    fi
+done
+
+if [[ "$VNC_PASSWORD" != "" ]]; then
+    export VNCSERVER_OPTS="-passwd /etc/vncpasswd"
+    echo "$VNC_PASSWORD" | vncpasswd -f > /etc/vncpasswd
+fi
+
+if [[ "$VNC_SCREEN_SIZE" == "" ]]; then
+    export VNC_SCREEN_SIZE="1024x768"
+fi
+
+exec "$@"
